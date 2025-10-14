@@ -12,22 +12,22 @@ API Server สำหรับจัดการข้อมูลโดรน �
 
 - **GET `/configs/:droneId`** → ดึงข้อมูล Config ของโดรน
   ```bash
-  curl [https://drone-api-a43n.onrender.com/configs/66010727](https://drone-api-a43n.onrender.com/configs/66010727)
+  curl https://drone-api-a43n.onrender.com/configs/66010727
   ```
 
 - **GET `/status/:droneId`** → ดึงสถานะ ของโดรน
   ```bash
-  curl [https://drone-api-a43n.onrender.com/status/66010727](https://drone-api-a43n.onrender.com/status/66010727)
+  curl https://drone-api-a43n.onrender.com/status/66010727
   ```
 
 - **GET `/logs/:droneId`** → ดึง Logs การทำงานของโดรน
   ```bash
-  curl "[https://drone-api-a43n.onrender.com/logs/66010727](https://drone-api-a43n.onrender.com/logs/66010727)"
+  curl https://drone-api-a43n.onrender.com/logs/66010727
   ```
 
 - **POST `/logs`** → สร้าง Log record ใหม่
   ```bash
-  curl -X POST [https://drone-api-a43n.onrender.com/logs](https://drone-api-a43n.onrender.com/logs) \
+  curl -X POST https://drone-api-a43n.onrender.com/logs\
     -H "Content-Type: application/json" \
     -d '{"drone_id":66010727,"drone_name":"MyDrone","country":"TH","celsius":35}'
   ```
@@ -38,7 +38,7 @@ API Server สำหรับจัดการข้อมูลโดรน �
 
 1.  **Clone & Install:**
     ```bash
-    git clone [https://github.com/Noeywanat/Assignment1.git](https://github.com/Noeywanat/Assignment1.git)
+    git clone https://github.com/Noeywanat/Assignment1.git
     cd Assignment1
     npm install
     ```
@@ -46,8 +46,8 @@ API Server สำหรับจัดการข้อมูลโดรน �
 2.  **Setup Environment:**
     สร้างไฟล์ `.env`
     ```
-    DRONE_CONFIG_URL=[https://script.google.com/macros/s/AKfycbzwclqJRodyVjzYyY-NTQDb9cWG6Hoc5vGAABVtr5-jPA_ET_2IasrAJK4aeo5XoONiaA/exec](https://script.google.com/macros/s/AKfycbzwclqJRodyVjzYyY-NTQDb9cWG6Hoc5vGAABVtr5-jPA_ET_2IasrAJK4aeo5XoONiaA/exec)
-    DRONE_LOG_URL=[https://app-tracking.pockethost.io/api/collections/drone_logs/records](https://app-tracking.pockethost.io/api/collections/drone_logs/records)
+    DRONE_CONFIG_URL=https://script.google.com/macros/s/AKfycbzwclqJRodyVjzYyY-NTQDb9cWG6Hoc5vGAABVtr5-jPA_ET_2IasrAJK4aeo5XoONiaA/exec
+    DRONE_LOG_URL=https://app-tracking.pockethost.io/api/collections/drone_logs/records
     DRONE_LOG_API_TOKEN=20250101efx
     PORT=3000
     ```
