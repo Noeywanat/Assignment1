@@ -1,47 +1,39 @@
-# Drone API Server (Assignment #1)
-
-API Server ที่สร้างด้วย Node.js และ Express.js สำหรับจัดการข้อมูลเกี่ยวกับโดรน โดยดึงและส่งข้อมูลไปยังเซิร์ฟเวอร์ภายนอก
+# Drone API Server (Assignment1)
+API Server ที่สร้างด้วย Node.js และ Express.js 
 
 ## Live API Endpoint
 
-**Base URL:** `<YOUR_DEPLOYED_APP_URL>`  
-*(คุณจะได้รับ URL นี้หลังจาก Deploy โปรเจกต์สำเร็จ)*
+**Base URL:** `https://drone-api-a43n.onrender.com`
 
 ---
 
-## API Endpoints & Test
+## API Endpoints & test
 
 ### 1. Get Drone Config
 - **Endpoint:** `GET /configs/:droneId`
-- **ตัวอย่าง:**
-  ```bash
-  curl <YOUR_DEPLOYED_APP_URL>/configs/3001
-  ```
+- ดึงข้อมูล Config ของโดรนตาม ID ที่ระบุ
+- **test:** curl https://drone-api-a43n.onrender.com/configs/66010727
 
 ### 2. Get Drone Status
 - **Endpoint:** `GET /status/:droneId`
-- **ตัวอย่าง:**
-  ```bash
-  curl <YOUR_DEPLOYED_APP_URL>/status/3001
-  ```
+- ดึงข้อมูลสถานะของโดรน
+- **test:** curl https://drone-api-a43n.onrender.com/status/66010727
 
 ### 3. Get Drone Logs
 - **Endpoint:** `GET /logs/:droneId`
-- **ตัวอย่าง:**
-  ```bash
-  curl "<YOUR_DEPLOYED_APP_URL>/logs/3001?page=1&limit=5"
-  ```
+- ดึงข้อมูล Logs การทำงานของโดรน
+- **test:** curl "https://drone-api-a43n.onrender.com/logs/66010727"
 
 ### 4. Create New Log
 - **Endpoint:** `POST /logs`
-- **ตัวอย่าง:**
-  ```bash
-  curl -X POST <YOUR_DEPLOYED_APP_URL>/logs -H "Content-Type: application/json" -d '{"drone_id":3001,"drone_name":"MyDrone","country":"TH","celsius":35}'
-  ```
+- สร้าง Log record ใหม่
+- **test:** curl -X POST https://drone-api-a43n.onrender.com/logs \
+    -H "Content-Type: application/json" \
+    -d '{"drone_id":66010727,"drone_name":"MyDrone","country":"TH","celsius":35}'
 
 ---
 
-## การติดตั้งและ run (Local)
+## การติดตั้ง และ run (Local)
 
 ### สิ่งที่ต้องมี
 - [Node.js](https://nodejs.org/)
@@ -50,8 +42,8 @@ API Server ที่สร้างด้วย Node.js และ Express.js ส
 ### ขั้นตอน
 1.  **Clone the repository:**
     ```bash
-    git clone <your-github-repository-url>
-    cd <project-folder-name>
+    git clone https://github.com/Noeywanat/Assignment1.git
+    cd Assignment1
     ```
 
 2.  **Install dependencies:**
@@ -76,7 +68,7 @@ API Server ที่สร้างด้วย Node.js และ Express.js ส
 
 ---
 
-## 📂 โครงสร้าง
+## โครงสร้างโปรเจกต์
 - **/controllers**: จัดการ Logic การทำงานของแต่ละ Endpoint
-- **/routes**: กำหนด Path และเชื่อมต่อกับ Controller
+- **/routes**: กำหนด Path และเชื่อมต่อกับ Controller ที่ถูกต้อง
 - **server.js**: ไฟล์เริ่มต้นสำหรับตั้งค่าและรันเซิร์ฟเวอร์

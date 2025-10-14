@@ -1,40 +1,31 @@
-const axios = require('axios');
-
-const DRONE_LOG_URL = process.env.DRONE_LOG_URL;
-const DRONE_LOG_API_TOKEN = process.env.DRONE_LOG_API_TOKEN;
+// ในไฟล์ controllers/log.Controller.js
 
 exports.getLogs = async (req, res) => {
-    // ...
-};
-
-
-exports.createLog = async (req, res) => {
   try {
-    const { drone_id, drone_name, country, celsius } = req.body;
 
-    if (!drone_id || !drone_name || !country || celsius === undefined) {
-      return res.status(400).json({ message: 'Missing required fields: drone_id, drone_name, country, celsius' });
-    }
-
-    if (!DRONE_LOG_URL || !DRONE_LOG_API_TOKEN) {
-        console.error("!!! ERROR: DRONE_LOG_URL or DRONE_LOG_API_TOKEN is not defined in .env file.");
-        return res.status(500).json({ error: "Server configuration error." });
-    }
-    
-    const logData = { drone_id, drone_name, country, celsius };
     const config = {
       headers: {
-        'Authorization': `Bearer ${DRONE_LOG_API_TOKEN}`,
-        'Content-Type': 'application/json'
-      }
+        'Authorization': `Bearer ${DRONE_LOG_API_TOKEN}`
+      },
+      params: {
+        page: page,
+        perPage: limit,
+        sort: '-created',
+        filter: `drone_id=${droneId}`
+      },
+      timeout: 20000
     };
 
-    const response = await axios.post(DRONE_LOG_URL, logData, config);
+    const response = await axios.get(DRONE_LOG_URL, config);
 
-    res.status(201).json(response.data);
 
   } catch (error) {
-    console.error("!!! Detailed Error Creating Log:", error.response ? error.response.data : error.message);
-    res.status(500).json({ error: "Failed to create log" });
+    if (error.code === 'ECONNABORTED') {
+      console.error("!!! Timeout Error: Drone Log Server took too long to respond.");
+      return res.status(504).json({ error: "Gateway Timeout: The Drone Log Server is not responding." });
+    }
+
+    console.error("!!! Detailed Error Fetching Logs:", error.response ? error.response.data : error.message);
+    res.status(500).json({ error: "Failed to fetch logs" });
   }
 };
