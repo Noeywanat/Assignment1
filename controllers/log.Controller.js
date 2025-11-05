@@ -22,7 +22,7 @@ exports.getLogs = async (req, res) => {
             // ส่งพารามิเตอร์ page และ limit ให้ API ภายนอก
             params: {
                 page: page,
-                // *** แก้ไข: เปลี่ยน 'perPage' เป็น 'limit' เพื่อแก้ Error 400 ***
+                // แก้ไขตรงนี้: ใช้ 'limit' หาก API ภายนอกใช้ชื่อนี้ (ถ้ายัง Error 400 ให้ลองเปลี่ยนเป็น 'pageSize')
                 limit: limit, 
                 sort: '-created',
                 filter: `drone_id=${droneId}`
@@ -32,14 +32,12 @@ exports.getLogs = async (req, res) => {
 
         const response = await axios.get(DRONE_LOG_URL, config);
         
-        // 1. ดึง Log ที่ถูกตัดมาแล้ว (items) และข้อมูลเมตา (meta)
+        // ดึง Log และ Total Count
         const items = response.data.items || [];
         const meta = response.data.meta || {};
-        
-        // 2. ดึง Total Count (จำนวน Log ทั้งหมด) จาก Meta Data
         const totalCount = meta.totalItems || meta.totalCount || 0; 
         
-        // 3. จัดรูปแบบ Log
+        // จัดรูปแบบ Log
         const logs = items.map(log => ({
             drone_id: log.drone_id,
             drone_name: log.drone_name,
@@ -48,7 +46,6 @@ exports.getLogs = async (req, res) => {
             celsius: log.celsius
         }));
 
-        // 4. ส่ง logs และ totalCount กลับไปให้ Front-end
         res.json({ logs, totalCount }); 
 
     } catch (error) {
@@ -57,7 +54,6 @@ exports.getLogs = async (req, res) => {
             return res.status(504).json({ error: "Gateway Timeout: The Drone Log Server is not responding." });
         }
 
-        // หากยังเกิด Error 400 อีกครั้ง โค้ดนี้จะ Log ข้อความ Error เต็มๆ ที่ได้จาก API ภายนอกออกมา
         console.error("!!! Detailed Error Fetching Logs:", error.response ? error.response.data : error.message);
         res.status(500).json({ error: "Failed to fetch logs" });
     }
