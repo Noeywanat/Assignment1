@@ -19,10 +19,11 @@ exports.getLogs = async (req, res) => {
             headers: {
                 'Authorization': `Bearer ${DRONE_LOG_API_TOKEN}`
             },
-            // *** ส่งพารามิเตอร์ page และ perPage ให้ API ภายนอก ***
+            // ส่งพารามิเตอร์ page และ limit ให้ API ภายนอก
             params: {
                 page: page,
-                perPage: limit,
+                // *** แก้ไข: เปลี่ยน 'perPage' เป็น 'limit' เพื่อแก้ Error 400 ***
+                limit: limit, 
                 sort: '-created',
                 filter: `drone_id=${droneId}`
             },
@@ -35,8 +36,7 @@ exports.getLogs = async (req, res) => {
         const items = response.data.items || [];
         const meta = response.data.meta || {};
         
-        // ** 2. ดึง Total Count (จำนวน Log ทั้งหมด) จาก Meta Data **
-        // เราสมมติว่า API ภายนอกใช้ชื่อฟิลด์เป็น totalItems หรือ totalCount
+        // 2. ดึง Total Count (จำนวน Log ทั้งหมด) จาก Meta Data
         const totalCount = meta.totalItems || meta.totalCount || 0; 
         
         // 3. จัดรูปแบบ Log
@@ -48,7 +48,7 @@ exports.getLogs = async (req, res) => {
             celsius: log.celsius
         }));
 
-        // ** 4. ส่ง logs และ totalCount กลับไปให้ Front-end **
+        // 4. ส่ง logs และ totalCount กลับไปให้ Front-end
         res.json({ logs, totalCount }); 
 
     } catch (error) {
@@ -57,13 +57,13 @@ exports.getLogs = async (req, res) => {
             return res.status(504).json({ error: "Gateway Timeout: The Drone Log Server is not responding." });
         }
 
+        // หากยังเกิด Error 400 อีกครั้ง โค้ดนี้จะ Log ข้อความ Error เต็มๆ ที่ได้จาก API ภายนอกออกมา
         console.error("!!! Detailed Error Fetching Logs:", error.response ? error.response.data : error.message);
         res.status(500).json({ error: "Failed to fetch logs" });
     }
 };
 
-// +++ ฟังก์ชันสร้าง Log: ไม่ต้องแก้ไข +++
-// POST /logs 
+// POST /logs (ไม่ได้แก้ไข)
 exports.createLog = async (req, res) => {
     try {
         const { drone_id, drone_name, country, celsius } = req.body;
