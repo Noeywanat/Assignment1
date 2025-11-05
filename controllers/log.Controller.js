@@ -19,11 +19,11 @@ exports.getLogs = async (req, res) => {
             headers: {
                 'Authorization': `Bearer ${DRONE_LOG_API_TOKEN}`
             },
-            // ส่งพารามิเตอร์ page และ limit ให้ API ภายนอก
+            // ส่งพารามิเตอร์ที่แก้ไขแล้วให้ API ภายนอก
             params: {
                 page: page,
-                // แก้ไขตรงนี้: ใช้ 'limit' หาก API ภายนอกใช้ชื่อนี้ (ถ้ายัง Error 400 ให้ลองเปลี่ยนเป็น 'pageSize')
-                limit: limit, 
+                // *** แก้ไข: ลองเปลี่ยนจาก 'limit' เป็น 'per_page' ***
+                per_page: limit, 
                 sort: '-created',
                 filter: `drone_id=${droneId}`
             },
@@ -55,6 +55,7 @@ exports.getLogs = async (req, res) => {
         }
 
         console.error("!!! Detailed Error Fetching Logs:", error.response ? error.response.data : error.message);
+        // แสดง Error 500 กลับไป
         res.status(500).json({ error: "Failed to fetch logs" });
     }
 };
